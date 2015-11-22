@@ -1,0 +1,3 @@
+target/
+/user/cfg/zellij/plugins/**
+.direnv
