@@ -14,7 +14,6 @@ pub(crate) fn list_sessions() -> io::Result<Vec<String>> {
         let stdout = String::from_utf8(output.stdout).unwrap();
         let lines: Vec<String> = stdout
             .split('\n')
-            .into_iter()
             .filter_map(|s| match s {
                 "" => None,
                 s => Some(s.to_owned()),
@@ -87,13 +86,22 @@ pub(crate) fn create(
     layout: &Option<String>,
     dir: &Option<Dir>,
 ) -> Result<ExitStatus, io::Error> {
-    let mut args = vec!["--session", session];
+    let mut cmd = Command::new("nix");
+    let zellij_cmd = format!("zellij --session {session}");
+    let args = vec!["develop", "-c", &zellij_cmd];
 
-    if let Some(layout) = layout {
-        args.extend_from_slice(&["--layout", layout]);
+    if let Some(dir) = dir {
+        cmd.current_dir(dir);
+    }
+    if let Ok(status) = cmd.args(&args).status() {
+        return Ok(status);
     }
 
     let mut cmd = Command::new(BIN);
+    let mut args = vec!["--session", session];
+    if let Some(layout) = layout {
+        args.extend_from_slice(&["--layout", layout]);
+    }
 
     if let Some(dir) = dir {
         cmd.current_dir(dir);

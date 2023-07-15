@@ -218,7 +218,6 @@ impl Banners {
                 let banner = &banners[idx];
                 let lines = banner
                     .lines()
-                    .into_iter()
                     .map(|l| Spans(vec![Span::raw(l)]))
                     .collect::<Vec<Spans>>();
 
