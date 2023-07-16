@@ -21,6 +21,8 @@
           name = "zellij-runner";
           src = ./.;
         };
+        overlays.default = (self: super: { zellij-runner = packages.default; });
+
         apps.default = packages.default;
         devShell =
           pkgs.mkShell { packages = with pkgs; [ rust-analyzer rust ]; };
