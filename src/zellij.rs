@@ -87,14 +87,15 @@ pub(crate) fn create(
     dir: &Option<Dir>,
 ) -> Result<ExitStatus, io::Error> {
     let mut cmd = Command::new("nix");
-    let zellij_cmd = format!("zellij --session {session}");
-    let args = vec!["develop", "-c", &zellij_cmd];
+    let args = vec!["develop", "-c", "zellij", "--session", session];
 
     if let Some(dir) = dir {
         cmd.current_dir(dir);
     }
     if let Ok(status) = cmd.args(&args).status() {
-        return Ok(status);
+        if status.success() {
+            return Ok(status);
+        }
     }
 
     let mut cmd = Command::new(BIN);
