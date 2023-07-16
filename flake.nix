@@ -18,9 +18,8 @@
 
       in rec {
         packages.default = builder.buildPackage {
-          name = "wgsl-analyzer";
+          name = "zellij-runner";
           src = ./.;
-          cargoBuildOptions = opts: opts ++ ["-p" "wgsl_analyzer"];
         };
         apps.default = packages.default;
         devShell =
